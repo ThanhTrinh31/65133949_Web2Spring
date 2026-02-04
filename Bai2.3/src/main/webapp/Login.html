@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Login</title>
+
+<style>
+body {
+    font-family: Arial;
+    background: linear-gradient(135deg,#667eea,#764ba2);
+    height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.card {
+    background:white;
+    padding:30px;
+    width:360px;
+    border-radius:14px;
+    box-shadow:0 15px 35px rgba(0,0,0,0.2);
+}
+
+input, button {
+    width:100%;
+    padding:12px;
+    margin:10px 0;
+}
+
+button {
+    background:#667eea;
+    color:white;
+    border:none;
+    cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+<h2>Đăng nhập</h2>
+
+<form action="Login.jsp" method="post">
+    Username:
+    <input type="text" name="user" required>
+
+    Password:
+    <input type="password" name="pass" required>
+
+    <button type="submit">Login</button>
+</form>
+
+</div>
+
+</body>
+</html>

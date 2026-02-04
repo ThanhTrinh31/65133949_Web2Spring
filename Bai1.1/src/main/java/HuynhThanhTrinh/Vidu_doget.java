@@ -31,7 +31,7 @@ public class Vidu_doget extends HttpServlet {
 		PrintWriter tl = response.getWriter();
 		
 		tl.print("Xinchao");
-		tl.print("Thanhkiu");
+		tl.print("<H1>Thanhkiu<H1>");
 	}
 
 }
