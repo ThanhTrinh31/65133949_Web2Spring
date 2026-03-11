@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Danh sách các Trang</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 30px; }
+        h2 { color: #b30000; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        tr:hover { background-color: #f9f9f9; }
+        .back-btn { display: inline-block; margin-top: 20px; padding: 10px 15px; background: #333; color: white; text-decoration: none; border-radius: 5px; }
+    </style>
+</head>
+<body>
+
+    <h2>Quản lý danh sách các trang (Pages)</h2>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Tên Trang (Page Name)</th>
+                <th>Từ khóa (Keyword)</th>
+                <th>Nội dung (Content)</th>
+                <th>ID Trang cha</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="trang : ${lstPages}">
+                <td th:text="${trang.id}">1</td>
+                <td th:text="${trang.pageName}">Tên mẫu</td>
+                <td th:text="${trang.keyword}">Từ khóa mẫu</td>
+                <td th:text="${trang.content}">Nội dung mẫu</td>
+                <td th:text="${trang.parentPageId}">0</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="/dashboard" class="back-btn">⬅ Quay lại Dashboard</a>
+
+</body>
+</html>
