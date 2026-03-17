@@ -6,6 +6,11 @@ public class Page {
 	private String keyword;
 	private String content;
 	private int parentPageId;
+	
+	
+	// --- [MỚI THÊM] KHUÔN TRỐNG ĐỂ SPRING BOOT HỨNG DỮ LIỆU TỪ FORM ---
+    public Page() {
+    }
 	// Skill 1: Constructor (Hàm khởi tạo - Dùng để nặn bánh từ khuôn)
     public Page(int id, String pageName, String keyword, String content, int parentPageId) {
         this.id = id;

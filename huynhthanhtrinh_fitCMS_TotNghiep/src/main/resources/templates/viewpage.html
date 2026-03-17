@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Chi tiết Page</title>
+    <style> body { font-family: Arial, sans-serif; margin: 30px; line-height: 1.6; } </style>
+</head>
+<body>
+
+    <h2>Chi tiết Trang (Yêu cầu 3.c)</h2>
+    
+    <div>
+        <p><strong>ID:</strong> <span th:text="${pageDetail.id}"></span></p>
+        <p><strong>Tên trang (Page Name):</strong> <span th:text="${pageDetail.pageName}"></span></p>
+        <p><strong>Từ khóa (Keyword):</strong> <span th:text="${pageDetail.keyword}"></span></p>
+        <p><strong>Nội dung (Content):</strong> <span th:text="${pageDetail.content}"></span></p>
+        <p><strong>ID Trang Cha:</strong> <span th:text="${pageDetail.parentPageId}"></span></p>
+    </div>
+
+    <br>
+    <a href="/page/all">⬅ Trở về danh sách</a>
+
+</body>
+</html>

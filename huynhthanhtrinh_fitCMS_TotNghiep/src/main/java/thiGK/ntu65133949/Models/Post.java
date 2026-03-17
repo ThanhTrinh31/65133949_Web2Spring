@@ -15,6 +15,9 @@ public class Post {
         this.categoryId = categoryId;
         this.thumbnailImage = thumbnailImage;
     }
+    // Khuôn rỗng (Default Constructor) bắt buộc phải có cho Spring Boot
+    public Post() {
+    }
 
     // Getters & Setters
     public int getId() { return id; }

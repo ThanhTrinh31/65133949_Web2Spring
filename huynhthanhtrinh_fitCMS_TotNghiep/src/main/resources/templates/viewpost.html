@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Chi tiết Bài viết</title>
+    <style> body { font-family: Arial, sans-serif; margin: 30px; line-height: 1.6; } </style>
+</head>
+<body>
+
+    <h2>Chi tiết Bài viết (Yêu cầu 4.c)</h2>
+    
+    <div>
+        <p><strong>ID:</strong> <span th:text="${postDetail.id}"></span></p>
+        <p><strong>Tiêu đề (Title):</strong> <span th:text="${postDetail.title}"></span></p>
+        <p><strong>Nội dung:</strong> <span th:text="${postDetail.content}"></span></p>
+        <p><strong>Mã Thể loại (Category ID):</strong> <span th:text="${postDetail.categoryId}"></span></p>
+        <p><strong>Ảnh Thumbnail:</strong> <span th:text="${postDetail.thumbnailImage}"></span></p>
+    </div>
+
+    <br>
+    <a href="/post/all">⬅ Trở về danh sách Post</a>
+
+</body>
+</html>

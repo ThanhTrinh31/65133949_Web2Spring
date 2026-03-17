@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Danh sách Bài viết (Post)</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { border: 1px solid #333; padding: 10px; text-align: left; }
+        th { background-color: #e6f2ff; }
+        .action-links a { text-decoration: none; font-weight: bold; margin-right: 5px; }
+        .btn-add { display: inline-block; padding: 10px 15px; background-color: #28a745; color: white; text-decoration: none; border-radius: 5px; }
+    </style>
+</head>
+<body>
+
+    <h2>Danh sách Bài viết (Yêu cầu 4.a)</h2>
+    
+    <a th:href="@{/post/new}" class="btn-add">+ Thêm mới Post</a>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>id</th>
+                <th>title</th>
+                <th>categoryId</th>
+                <th>Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="baiViet : ${lstPosts}">
+                <td th:text="${baiViet.id}">1</td>
+                <td th:text="${baiViet.title}">Tiêu đề mẫu</td>
+                <td th:text="${baiViet.categoryId}">1</td>
+                <td class="action-links">
+                    <a th:href="@{/post/view/{id}(id=${baiViet.id})}">[view]</a> 
+                    <a href="#">[edit]</a> 
+                    <a th:href="@{/post/delete/{id}(id=${baiViet.id})}" style="color: red;" onclick="return confirm('Bạn có chắc chắn muốn xóa bài viết này?');">[delete]</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</body>
+</html>
