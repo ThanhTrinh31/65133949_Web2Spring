@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Danh sách các Trang (Page)</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 30px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        .action-links a { margin-right: 10px; text-decoration: none; color: blue; font-weight: bold;}
+        .action-links a.delete { color: red; }
+    </style>
+</head>
+<body>
+
+    <h2>Danh sách các Page (Yêu cầu 3.a)</h2>
+    
+    <a href="/page/new" style="padding: 10px; background: green; color: white; text-decoration: none; border-radius: 4px;">+ Thêm mới Page</a>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>id</th>
+                <th>Pagename</th>
+                <th>parentPageId</th>
+                <th>Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="trang : ${lstPages}">
+                <td th:text="${trang.id}"></td>
+                <td th:text="${trang.pageName}"></td>
+                <td th:text="${trang.parentPageId}"></td>
+                <td class="action-links">
+                    <a th:href="@{/page/view/{id}(id=${trang.id})}">[view]</a>
+                    <a href="#">[edit]</a> 
+                    <a th:href="@{/page/delete/{id}(id=${trang.id})}" class="delete" onclick="return confirm('Bạn có chắc muốn xóa không?');">[delete]</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <br><br>
+    <a href="/dashboard">⬅ Quay lại Dashboard</a>
+
+</body>
+</html>

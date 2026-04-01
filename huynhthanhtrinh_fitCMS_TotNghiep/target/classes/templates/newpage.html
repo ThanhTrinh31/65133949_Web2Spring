@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Thêm mới Page</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 30px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold;}
+        input[type="text"], input[type="number"] { width: 300px; padding: 8px; box-sizing: border-box; border: 1px solid #ccc; border-radius: 4px;}
+        button { padding: 10px 15px; background: #28a745; color: white; border: none; cursor: pointer; border-radius: 4px; font-weight: bold;}
+        button:hover { background: #218838; }
+        .cancel-btn { padding: 10px 15px; background: #6c757d; color: white; text-decoration: none; margin-left: 10px; border-radius: 4px;}
+    </style>
+</head>
+<body>
+
+    <h2>Thêm mới một Page (Yêu cầu 3.b)</h2>
+
+    <form th:action="@{/page/new}" th:object="${pageMoi}" method="POST">
+        
+        <div class="form-group">
+            <label>ID:</label>
+            <input type="number" th:field="*{id}" required placeholder="Ví dụ: 4" />
+        </div>
+
+        <div class="form-group">
+            <label>Tên trang (Page Name):</label>
+            <input type="text" th:field="*{pageName}" required placeholder="Ví dụ: Tin tức" />
+        </div>
+
+        <div class="form-group">
+            <label>Từ khóa (Keyword):</label>
+            <input type="text" th:field="*{keyword}" placeholder="Ví dụ: news, tintuc" />
+        </div>
+
+        <div class="form-group">
+            <label>Nội dung (Content):</label>
+            <input type="text" th:field="*{content}" placeholder="Nhập nội dung vào đây..." />
+        </div>
+
+        <div class="form-group">
+            <label>ID Trang cha (Parent Page ID):</label>
+            <input type="number" th:field="*{parentPageId}" value="0" />
+        </div>
+
+        <br>
+        <button type="submit">💾 Lưu lại</button>
+        <a href="/page/all" class="cancel-btn">Hủy bỏ</a>
+    </form>
+
+</body>
+</html>
