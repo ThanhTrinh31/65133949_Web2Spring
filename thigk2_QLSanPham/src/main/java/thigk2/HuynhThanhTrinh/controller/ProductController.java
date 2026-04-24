@@ -38,7 +38,12 @@ public class ProductController {
     // Hiển thị chi tiết một sản phẩm theo mã
     @GetMapping("/sanpham/chitiet/{id}")
     public String xemChiTiet(@PathVariable("id") Integer id, Model model) {
-        model.addAttribute("sp", sanPhamRepo.findById(id).orElse(null));
+        SanPham sp = sanPhamRepo.findById(id).orElse(null);
+        if (sp == null) {
+            // Nếu không tìm thấy, đá văng về trang danh sách luôn
+            return "redirect:/sanpham"; 
+        }
+        model.addAttribute("sp", sp);
         return "sanpham_detail";
     }
 }
