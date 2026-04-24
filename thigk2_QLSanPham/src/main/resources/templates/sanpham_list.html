@@ -4,17 +4,37 @@
     <meta charset="UTF-8">
     <title>Danh sách Sản phẩm</title>
     <style>
-        table { width: 80%; border-collapse: collapse; margin-top: 20px; }
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
         th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
         th { background-color: #f2f2f2; }
-        .filter { margin-bottom: 20px; }
+        
+        /* CSS đẩy nút lên góc phải */
+        .top-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        .user-actions a { text-decoration: none; padding: 8px 15px; border-radius: 5px; font-weight: bold; }
+        .btn-login { background-color: #28a745; color: white; }
+        .btn-logout { background-color: #dc3545; color: white; }
+        
+        .filter { margin: 20px 0; }
     </style>
 </head>
 <body>
-    <h1>DANH SÁCH SẢN PHẨM</h1>
+
+    <div class="top-header">
+        <h1>DANH SÁCH SẢN PHẨM</h1>
+        
+        <div class="user-actions">
+            <a th:if="${session.userLogedIn == null}" href="/login" class="btn-login">🔑 Đăng nhập</a>
+            
+            <span th:if="${session.userLogedIn != null}">
+                Chào, <b th:text="${session.userLogedIn.username}"></b> | 
+                <a href="/logout" class="btn-logout">🚪 Đăng xuất</a>
+            </span>
+        </div>
+    </div>
     
     <div class="filter">
-        <b>Lọc theo thể loại:</b>
+        <b>🔍 Lọc theo thể loại:</b>
         <a href="/sanpham">Tất cả</a> | 
         <span th:each="tl : ${listTL}">
             <a th:href="@{/sanpham(idTL=${tl.id})}" th:text="${tl.tenTheLoai}"></a> |
@@ -35,13 +55,14 @@
             <tr th:each="sp : ${listSP}">
                 <td th:text="${sp.id}"></td>
                 <td th:text="${sp.tenSP}"></td>
-                <td th:text="${sp.gia}"></td>
+                <td th:text="${#numbers.formatDecimal(sp.gia, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'"></td>
                 <td th:text="${sp.theLoai.tenTheLoai}"></td>
                 <td>
-                    <a th:href="@{/sanpham/chitiet/{id}(id=${sp.id})}">Xem chi tiết</a>
+                    <a th:href="@{/sanpham/chitiet/{id}(id=${sp.id})}">Chi tiết</a>
                 </td>
             </tr>
         </tbody>
     </table>
+
 </body>
 </html>
