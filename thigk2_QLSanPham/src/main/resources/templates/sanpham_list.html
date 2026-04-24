@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Danh sách Sản phẩm</title>
+    <style>
+        table { width: 80%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ccc; padding: 10px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        .filter { margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <h1>DANH SÁCH SẢN PHẨM</h1>
+    
+    <div class="filter">
+        <b>Lọc theo thể loại:</b>
+        <a href="/sanpham">Tất cả</a> | 
+        <span th:each="tl : ${listTL}">
+            <a th:href="@{/sanpham(idTL=${tl.id})}" th:text="${tl.tenTheLoai}"></a> |
+        </span>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Mã SP</th>
+                <th>Tên sản phẩm</th>
+                <th>Giá bán</th>
+                <th>Thể loại</th>
+                <th>Thao tác</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="sp : ${listSP}">
+                <td th:text="${sp.id}"></td>
+                <td th:text="${sp.tenSP}"></td>
+                <td th:text="${sp.gia}"></td>
+                <td th:text="${sp.theLoai.tenTheLoai}"></td>
+                <td>
+                    <a th:href="@{/sanpham/chitiet/{id}(id=${sp.id})}">Xem chi tiết</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
