@@ -1,22 +1,41 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Chi tiết Sản phẩm</title>
+<meta charset="UTF-8">
+<title>Chi tiết Sản phẩm</title>
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+	rel="stylesheet">
 </head>
-<body>
-    <h1>THÔNG TIN CHI TIẾT SẢN PHẨM</h1>
-    <hr>
-    <div th:if="${sp != null}">
-        <p><b>Mã sản phẩm:</b> <span th:text="${sp.id}"></span></p>
-        <p><b>Tên sản phẩm:</b> <span th:text="${sp.tenSP}"></span></p>
-        <p><b>Giá bán:</b> <span th:text="${sp.gia}"></span> VNĐ</p>
-        <p><b>Chuyên mục:</b> <span th:text="${sp.theLoai.tenTheLoai}"></span></p>
-    </div>
-    <div th:unless="${sp != null}">
-        <p style="color: red;">Không tìm thấy sản phẩm này!</p>
-    </div>
-    <br>
-    <a href="/sanpham">⬅ Quay lại danh sách</a>
+<body class="bg-light pt-5">
+	<div class="container">
+		<div class="card shadow mx-auto"
+			style="max-width: 600px; border-radius: 15px;">
+			<div class="card-header bg-primary text-white text-center">
+				<h3 class="m-0 fw-bold">CHI TIẾT SẢN PHẨM</h3>
+			</div>
+			<div class="card-body fs-5" th:if="${sp != null}">
+				<p>
+					<b>🏷️ Mã sản phẩm:</b> <span th:text="${sp.id}"
+						class="text-primary"></span>
+				</p>
+				<p>
+					<b>📱 Tên sản phẩm:</b> <span th:text="${sp.tenSP}" class="fw-bold"></span>
+				</p>
+				<p>
+					<b>💰 Giá bán:</b> <span
+						th:text="${#numbers.formatDecimal(sp.gia, 0, 'COMMA', 0, 'POINT')} + ' VNĐ'"
+						class="text-danger fw-bold"></span>
+				</p>
+				<p>
+					<b>📂 Thể loại:</b> <span th:text="${sp.theLoai.tenTheLoai}"></span>
+				</p>
+			</div>
+			<div class="card-footer text-center">
+				<a href="/sanpham" class="btn btn-secondary fw-bold">⬅ Quay lại
+					danh sách</a>
+			</div>
+		</div>
+	</div>
 </body>
 </html>
