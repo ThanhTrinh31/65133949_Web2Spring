@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản Trị Hệ Thống</title>
+</head>
+<body style="font-family: Arial; padding: 20px;">
+    <h1 style="color: red;">TRANG QUẢN TRỊ TIN TỨC</h1>
+    <a href="/">🏠 Quay lại Trang Chủ Đọc Báo</a>
+    <hr>
+
+    <h3>✍️ Thêm Tin Tức Mới</h3>
+    <form th:action="@{/admin/luu}" th:object="${tinTucMoi}" method="post" style="margin-bottom: 30px;">
+        <input type="text" th:field="*{tieuDe}" placeholder="Nhập tiêu đề..." required style="width: 300px; padding: 5px;"><br><br>
+        <textarea th:field="*{noiDung}" placeholder="Nhập nội dung..." required style="width: 300px; height: 80px; padding: 5px;"></textarea><br><br>
+        <select th:field="*{loaiTinTuc.id}" style="padding: 5px;">
+            <option th:each="loai : ${danhSachLoai}" th:value="${loai.id}" th:text="${loai.tenLoai}"></option>
+        </select><br><br>
+        <button type="submit" style="padding: 10px 20px; background: green; color: white; border: none; cursor: pointer;">LƯU BÀI VIẾT</button>
+    </form>
+
+    <h3>📚 Danh sách bài viết đang quản lý</h3>
+    <table border="1" cellpadding="10" cellspacing="0" style="width: 100%; text-align: left;">
+        <tr style="background: #eee;">
+            <th>ID</th>
+            <th>Tiêu đề</th>
+            <th>Chuyên mục</th>
+            <th>Thao tác</th>
+        </tr>
+        <tr th:each="tin : ${danhSachTin}">
+            <td th:text="${tin.id}"></td>
+            <td th:text="${tin.tieuDe}"></td>
+            <td th:text="${tin.loaiTinTuc.tenLoai}"></td>
+            <td>
+                <a th:href="@{/admin/xoa/{id}(id=${tin.id})}" style="color: red; text-decoration: none;" onclick="return confirm('Bro có chắc muốn xóa không?');">❌ Xóa</a>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

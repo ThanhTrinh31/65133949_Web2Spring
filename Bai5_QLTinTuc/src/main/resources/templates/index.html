@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Trang Đọc Báo</title>
+</head>
+<body style="font-family: Arial; padding: 20px;">
+    <h1 style="color: blue;">TIN TỨC MỚI NHẤT</h1>
+    <a href="/admin" style="display:inline-block; margin-bottom: 20px;">👉 Chuyển sang Trang Quản Trị (Admin)</a>
+    <hr>
+    
+    <div th:each="tin : ${danhSachTin}" style="background: #f9f9f9; padding: 15px; margin-bottom: 15px; border-radius: 5px;">
+        <h2 th:text="${tin.tieuDe}" style="margin: 0 0 10px 0;">Tiêu đề bài viết</h2>
+        <p th:text="${tin.noiDung}">Nội dung bài viết...</p>
+        <i>Chuyên mục: <b th:text="${tin.loaiTinTuc.tenLoai}">Tên loại</b></i>
+    </div>
+</body>
+</html>
