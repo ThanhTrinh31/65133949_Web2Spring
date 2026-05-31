@@ -11,10 +11,10 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 10)
+    @Column(nullable = false, length = 100)
     private String name;
 
-    @Column(nullable = false, length = 10)
+    @Column(nullable = false, length = 100)
     private String type; // "INCOME" hoặc "EXPENSE"
 
     // Cách xử lý lỗi: Gán trực tiếp = 0.0 và định nghĩa cột trong database mặc định là 0
@@ -22,7 +22,7 @@ public class Category {
     private Double budgetLimit = 0.0;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = true)
     private User user;
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)

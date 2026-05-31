@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản Lý Danh Mục</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body class="bg-gray-100 font-sans p-6">
+    <div class="max-w-4xl mx-auto bg-white p-6 rounded-xl shadow-md">
+        <div class="flex justify-between items-center mb-6 border-b pb-4 border-gray-200">
+            <div class="flex items-center gap-4">
+                <a th:href="@{/}" class="text-blue-600 hover:underline font-medium">← Quay lại Dashboard</a>
+                <h1 class="text-2xl font-bold text-gray-800">📁 Quản Lý Danh Mục Chi Tiêu</h1>
+            </div>
+            <span class="text-gray-600 font-medium" th:text="'Xin chào, ' + ${user.username}"></span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 h-fit">
+                <h2 class="text-lg font-semibold text-gray-700 mb-3">Tạo danh mục riêng</h2>
+                <form th:action="@{/category/add}" th:object="${newCategory}" method="POST" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-1">Tên danh mục</label>
+                        <input type="text" th:field="*{name}" required placeholder="Nuôi mèo, Quỹ đen..." class="w-full p-2 border border-gray-300 rounded focus:outline-none bg-white">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-1">Loại danh mục</label>
+                        <select th:field="*{type}" class="w-full p-2 border border-gray-300 rounded focus:outline-none bg-white">
+                            <option value="EXPENSE">EXPENSE (Khoản Chi)</option>
+                            <option value="INCOME">INCOME (Khoản Thu)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-1">Hạn mức tháng (đ)</label>
+                        <input type="number" th:field="*{budgetLimit}" placeholder="0 (Không giới hạn)" class="w-full p-2 border border-gray-300 rounded focus:outline-none bg-white">
+                    </div>
+                    <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-medium p-2 rounded transition shadow-sm">
+                        Tạo danh mục
+                    </button>
+                </form>
+            </div>
+
+            <div class="md:col-span-2">
+                <h2 class="text-lg font-semibold text-gray-700 mb-3">Danh sách hũ tiền hiện tại</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-gray-100 text-gray-600 uppercase text-xs tracking-wider">
+                                <th class="p-3 border-b border-gray-200">Tên</th>
+                                <th class="p-3 border-b border-gray-200">Loại</th>
+                                <th class="p-3 border-b border-gray-200 text-right">Hạn mức tháng</th>
+                                <th class="p-3 border-b border-gray-200 text-center">Sở hữu</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-sm text-gray-700">
+                            <tr th:each="cat : ${categories}" class="hover:bg-gray-50 border-b border-gray-200">
+                                <td class="p-3 font-semibold th:text='${cat.name}'" th:text="${cat.name}"></td>
+                                <td class="p-3">
+                                    <span th:text="${cat.type}" class="px-2 py-0.5 rounded text-xs font-bold"
+                                          th:classappend="${cat.type == 'INCOME' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}"></span>
+                                </td>
+                                <td class="p-3 text-right font-medium text-gray-600" 
+                                    th:text="${cat.budgetLimit > 0 ? #numbers.formatDecimal(cat.budgetLimit, 0, 'COMMA', 0, 'POINT') + ' đ' : 'Vô hạn'}"></td>
+                                <td class="p-3 text-center">
+                                    <span th:text="${cat.user == null ? 'Hệ thống (Chung)' : 'Cá nhân'}" 
+                                          class="text-xs text-gray-500 italic"></span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
