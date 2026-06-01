@@ -8,7 +8,8 @@ Một ứng dụng web quản lý tài chính cá nhân toàn diện, lấy cả
 
 * **Hệ thống Xác thực Người dùng bảo mật (Authentication):** Đăng ký/Đăng nhập an toàn sử dụng `HttpSession` phân quyền theo từng phiên làm việc của User.
 * **Mã hóa Mật khẩu một chiều:** Tích hợp thư viện bảo mật **BCrypt Hashing** để băm mật khẩu thành chuỗi 60 ký tự bảo mật trước khi lưu xuống database, chống rò rỉ dữ liệu.
-* **Quản lý Danh mục thông minh (Global & Personal Categories):** * *Danh mục Hệ thống (Global):* Các danh mục thu/chi mặc định dùng chung cho mọi tài khoản để tối ưu tài nguyên lưu trữ.
+* **Quản lý Danh mục thông minh (Global & Personal Categories):**
+    * *Danh mục Hệ thống (Global):* Các danh mục thu/chi mặc định dùng chung cho mọi tài khoản để tối ưu tài nguyên lưu trữ.
     * *Danh mục Cá nhân (Personal):* Cho phép từng người dùng tự tạo thêm hũ tiền riêng và cấu hình **Hạn mức chi tiêu (`budget_limit`)** cho từng danh mục.
 * **Dashboard Thống kê Trực quan:** Tích hợp **Chart.js** vẽ biểu đồ hình chiếc nhẫn (Doughnut Chart) tự động tính toán co giãn tỷ lệ phần trăm các khoản chi tiêu trong tháng.
 * **Hệ thống Cảnh báo Vượt hạn mức (Smart Alert):** Quét dữ liệu thời gian thực và tự động nhuộm đỏ giao diện, hiển thị cảnh báo `⚠️ Vượt hạn mức` khi một danh mục chi tiêu vượt quá số tiền hạn mức đã đặt trong tháng.
@@ -21,16 +22,16 @@ Một ứng dụng web quản lý tài chính cá nhân toàn diện, lấy cả
 
 * **Backend:** Java 17/23, Spring Boot, Spring Data JPA.
 * **Frontend Template Engine:** Thymeleaf.
-* **CSS Framework:** Tailwind CSS v4 (qua CDN nhanh nhẹn).
+* **CSS Framework:** Tailwind CSS v4 (qua CDN).
 * **Database:** MySQL (quản lý qua XAMPP phpMyAdmin).
 * **Libraries:** Apache POI (xử lý Excel), jBCrypt (Mã hóa mật khẩu), Chart.js (Vẽ biểu đồ).
 * **Build Tool:** Maven.
 
 ---
-
+```text
 ## 📁 Cấu Trúc Thư Mục Dự Án (Project Structure)
 
-```text
+
 HuynhThanhTrinh_65133949
  ├── src
  │    ├── main
@@ -49,7 +50,10 @@ HuynhThanhTrinh_65133949
  │    │         │    └── history.html
  │    │         └── application.properties     # Cấu hình kết nối MySQL và Hibernate
  └── pom.xml                                   # Quản lý thư viện Maven phụ thuộc
-💻 Hướng Dẫn Cài Đặt & Khởi Chạy (Installation & Setup)
+
+```
+---
+## 💻 Hướng Dẫn Cài Đặt & Khởi Chạy (Installation & Setup)
 1. Chuẩn bị môi trường (Prerequisites)
 Máy tính đã cài đặt Java JDK 17 hoặc mới hơn.
 
@@ -62,24 +66,30 @@ Truy cập vào localhost/phpmyadmin, tạo một cơ sở dữ liệu mới đ�
 
 Cấu hình chuỗi kết nối trong file src/main/resources/application.properties trùng khớp với tài khoản MySQL của bạn:
 
-Properties
-spring.datasource.url=jdbc:mysql://localhost:3000/quanly_chitieu?useSSL=false&serverTimezone=UTC
+```Properties
+spring.datasource.url=jdbc:mysql://localhost:3306/quanly_chitieu?useSSL=false&serverTimezone=UTC
 spring.datasource.username=root
 spring.datasource.password=
 spring.jpa.hibernate.ddl-auto=update
+```
+
 3. Khởi chạy ứng dụng
 Cách 1: Chạy trực tiếp từ file thực thi .jar độc lập
 Vào thư mục target/ của dự án, mở cửa sổ PowerShell/CMD và gõ lệnh:
 
-Bash
+```Bash
 java -jar .\quanly_chitieu-0.0.1-SNAPSHOT.jar
+```
+
 Cách 2: Chạy thông qua công cụ Maven
-Bash
+```Bash
 mvn spring-boot:run
+```
+
 Sau khi hệ thống báo khởi động thành công, hãy mở trình duyệt và truy cập: http://localhost:8080 để trải nghiệm ứng dụng.
 
 👤 Thông Tin Tác Giả (Author)
-Sinh viên thực hiện: Huỳnh Thanh Trịnh
+Sinh viên thực hiện: Huỳnh Thanh Trình
 
 Mã số sinh viên: 65133949
 
