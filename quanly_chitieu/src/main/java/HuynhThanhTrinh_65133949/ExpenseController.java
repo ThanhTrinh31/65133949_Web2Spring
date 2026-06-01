@@ -8,6 +8,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.*;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @Controller
 public class ExpenseController {
@@ -220,5 +224,121 @@ public class ExpenseController {
         model.addAttribute("totalExpense", totalExpense);
 
         return "history"; // Sẽ tạo file history.html ở Bước 3
+    }
+    @GetMapping("/history/export")
+    public void exportToExcel(@RequestParam("startDate") String startStr,
+                              @RequestParam("endDate") String endStr,
+                              HttpSession session, HttpServletResponse response) throws IOException {
+        
+        User loggedInUser = (User) session.getAttribute("loggedInUser");
+        if (loggedInUser == null) {
+            response.sendRedirect("/login");
+            return;
+        }
+
+        LocalDate startDate = LocalDate.parse(startStr);
+        LocalDate endDate = LocalDate.parse(endStr);
+
+        // 1. Lấy đúng dữ liệu giao dịch trong kỳ của người dùng
+        List<Transaction> transactions = transactionRepo.findByUserIdAndTransactionDateBetween(
+                loggedInUser.getId(), startDate, endDate);
+
+        // Tính toán trước các con số tổng kết để đưa vào Excel
+        Double totalIncome = 0.0;
+        Double totalExpense = 0.0;
+        for (Transaction t : transactions) {
+            if ("INCOME".equals(t.getCategory().getType())) {
+                totalIncome += t.getAmount();
+            } else if ("EXPENSE".equals(t.getCategory().getType())) {
+                totalExpense += t.getAmount();
+            }
+        }
+        Double periodBalance = totalIncome - totalExpense;
+
+        // 2. Cấu hình thông tin file trả về cho trình duyệt
+        response.setContentType("application/octet-stream");
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=BaoCaoChiTieu_" + startStr + "_to_" + endStr + ".xlsx";
+        response.setHeader(headerKey, headerValue);
+
+        // 3. Khởi tạo Workbook Excel mới tinh
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("Lịch sử giao dịch");
+
+        // --- CẤU HÌNH CÁC KIỂU CHỮ (STYLE) ---
+        // Kiểu chữ cho Tiêu đề bảng (Header)
+        Font headerFont = workbook.createFont();
+        headerFont.setBold(true);
+        headerFont.setColor(IndexedColors.WHITE.getIndex());
+        CellStyle headerCellStyle = workbook.createCellStyle();
+        headerCellStyle.setFont(headerFont);
+        headerCellStyle.setFillForegroundColor(IndexedColors.BLUE_GREY.getIndex());
+        headerCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+        // Kiểu chữ in đậm cho các dòng Tổng kết dữ liệu
+        Font boldFont = workbook.createFont();
+        boldFont.setBold(true);
+        CellStyle boldCellStyle = workbook.createCellStyle();
+        boldCellStyle.setFont(boldFont);
+
+     // --- KHỞI TẠO ĐỊNH DẠNG SỐ TIỀN KHÔNG BỊ LỖI PHÂN RÃ E+ ---
+        java.text.DecimalFormat df = new java.text.DecimalFormat("#,###");
+
+        // 4. TẠO CÁC DÒNG THÔNG TIN TỔNG KẾT ĐẦU FILE (Đã sửa lỗi hiển thị)
+        Row rowSummary1 = sheet.createRow(0);
+        rowSummary1.createCell(0).setCellValue("Tổng thu nhập trong kỳ:");
+        rowSummary1.createCell(1).setCellValue(df.format(totalIncome) + " đ"); // Ép định dạng chữ số rõ ràng
+        rowSummary1.getCell(0).setCellStyle(boldCellStyle);
+
+        Row rowSummary2 = sheet.createRow(1);
+        rowSummary2.createCell(0).setCellValue("Tổng chi tiêu trong kỳ:");
+        rowSummary2.createCell(1).setCellValue("-" + df.format(totalExpense) + " đ");
+        rowSummary2.getCell(0).setCellStyle(boldCellStyle);
+
+        Row rowSummary3 = sheet.createRow(2);
+        rowSummary3.createCell(0).setCellValue("Số dư trong kỳ này:");
+        rowSummary3.createCell(1).setCellValue((periodBalance >= 0 ? "" : "-") + df.format(Math.abs(periodBalance)) + " đ");
+        rowSummary3.getCell(0).setCellStyle(boldCellStyle);
+
+        // Để trống dòng số 3 cho thoáng file Excel
+        sheet.createRow(3);
+
+        // 5. TẠO HÀNG TIÊU ĐỀ BẢNG (Bắt đầu từ Dòng số 4)
+        Row headerRow = sheet.createRow(4);
+        String[] columns = {"STT", "Ngày giao dịch", "Danh mục", "Loại", "Ghi chú", "Số tiền (đ)"};
+        for (int i = 0; i < columns.length; i++) {
+            Cell cell = headerRow.createCell(i);
+            cell.setCellValue(columns[i]);
+            cell.setCellStyle(headerCellStyle);
+        }
+
+        // 6. ĐỔ DỮ LIỆU GIAO DỊCH VÀO BẢNG LỊCH SỬ (Đã định dạng hàng nghìn)
+        int rowNum = 5;
+        for (int i = 0; i < transactions.size(); i++) {
+            Transaction t = transactions.get(i);
+            Row row = sheet.createRow(rowNum++);
+
+            row.createCell(0).setCellValue(i + 1); // Số thứ tự
+            row.createCell(1).setCellValue(t.getTransactionDate().toString());
+            row.createCell(2).setCellValue(t.getCategory().getName());
+            row.createCell(3).setCellValue(t.getCategory().getType());
+            row.createCell(4).setCellValue(t.getNote() != null ? t.getNote() : "");
+            
+            double amount = t.getAmount();
+            String amountStr = df.format(amount) + " đ";
+            if ("EXPENSE".equals(t.getCategory().getType())) {
+                amountStr = "-" + amountStr; // Thêm dấu trừ cho khoản chi
+            }
+            row.createCell(5).setCellValue(amountStr); // Ghi nhận dạng chuỗi đã định dạng đẹp mắt
+        }
+
+        // Tự động căn chỉnh độ rộng các cột
+        for (int i = 0; i < columns.length; i++) {
+            sheet.autoSizeColumn(i);
+        }
+
+        // 7. Ghi dữ liệu ra response stream để tải xuống
+        workbook.write(response.getOutputStream());
+        workbook.close();
     }
 }

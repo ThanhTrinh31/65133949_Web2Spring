@@ -44,7 +44,14 @@
         </div>
 
         <div>
-            <h2 class="text-lg font-semibold text-gray-700 mb-3">Danh sách giao dịch tìm thấy</h2>
+           <div class="flex justify-between items-center mb-3">
+			    <h2 class="text-lg font-semibold text-gray-700">Danh sách giao dịch tìm thấy</h2>
+			    
+			    <a th:href="@{/history/export(startDate=${startDate}, endDate=${endDate})}" 
+			       class="inline-flex items-center gap-2 text-sm bg-emerald-600 hover:bg-emerald-700 text-white font-semibold px-4 py-2 rounded transition shadow-sm">
+			        💚 Xuất báo cáo Excel
+			    </a>
+			</div>
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse">
                     <thead>
