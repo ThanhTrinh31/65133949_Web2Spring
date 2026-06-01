@@ -175,4 +175,50 @@ public class ExpenseController {
         categoryRepo.save(category);
         return "redirect:/categories"; // Tạo xong tải lại trang danh mục
     }
+ // --- THÊM MỚI: Trang Lịch Sử & Bộ Lọc Khoảng Ngày ---
+    @GetMapping("/history")
+    public String showHistoryPage(@RequestParam(value = "startDate", required = false) String startStr,
+                                  @RequestParam(value = "endDate", required = false) String endStr,
+                                  Model model, HttpSession session) {
+        User loggedInUser = (User) session.getAttribute("loggedInUser");
+        if (loggedInUser == null) return "redirect:/login";
+
+        LocalDate startDate;
+        LocalDate endDate;
+
+        // Nếu người dùng chủ động chọn ngày từ giao diện Form Lọc
+        if (startStr != null && !startStr.isEmpty() && endStr != null && !endStr.isEmpty()) {
+            startDate = LocalDate.parse(startStr);
+            endDate = LocalDate.parse(endStr);
+        } else {
+            // Mặc định: Lấy từ ngày 1 của tháng hiện tại đến ngày hôm nay
+            startDate = LocalDate.now().withDayOfMonth(1);
+            endDate = LocalDate.now();
+        }
+
+        // Gọi Repository để lọc dữ liệu chính xác trong khoảng ngày của riêng User này
+        List<Transaction> filteredTransactions = transactionRepo.findByUserIdAndTransactionDateBetween(
+                loggedInUser.getId(), startDate, endDate);
+
+        // Tính tổng thu và tổng chi trong khoảng thời gian được lọc để làm báo cáo nhanh
+        Double totalIncome = 0.0;
+        Double totalExpense = 0.0;
+        for (Transaction t : filteredTransactions) {
+            if ("INCOME".equals(t.getCategory().getType())) {
+                totalIncome += t.getAmount();
+            } else if ("EXPENSE".equals(t.getCategory().getType())) {
+                totalExpense += t.getAmount();
+            }
+        }
+
+        // Đẩy dữ liệu sang Thymeleaf
+        model.addAttribute("user", loggedInUser);
+        model.addAttribute("transactions", filteredTransactions);
+        model.addAttribute("startDate", startDate);
+        model.addAttribute("endDate", endDate);
+        model.addAttribute("totalIncome", totalIncome);
+        model.addAttribute("totalExpense", totalExpense);
+
+        return "history"; // Sẽ tạo file history.html ở Bước 3
+    }
 }
